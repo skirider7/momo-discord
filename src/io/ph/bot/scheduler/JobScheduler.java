@@ -17,6 +17,7 @@ import io.ph.bot.jobs.ReminderJob;
 import io.ph.bot.jobs.StatusChangeJob;
 import io.ph.bot.jobs.TimedPunishJob;
 import io.ph.bot.jobs.TwitchStreamJob;
+import io.ph.bot.jobs.VoiceChannelCheckJob;
 import io.ph.bot.jobs.WebSyncJob;
 
 public class JobScheduler {
@@ -87,6 +88,17 @@ public class JobScheduler {
 			e.printStackTrace();
 		}
 	}
+	
+	private static void leaveEmptyVoiceChannels() {
+		JobDetail job = JobBuilder.newJob(VoiceChannelCheckJob.class).withIdentity("voiceChannelLeaveGroup", "group1").build();
+		Trigger trigger = TriggerBuilder.newTrigger().withIdentity("voiceChannelLeaveGroup", "group1")
+				.withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInMinutes(45).repeatForever()).build();
+		try {
+			scheduler.scheduleJob(job, trigger);
+		} catch (SchedulerException e) {
+			e.printStackTrace();
+		}
+	}
 
 	private static void statusChange() {
 		if(StatusChangeJob.statuses == null || StatusChangeJob.statuses.length == 0
@@ -126,5 +138,6 @@ public class JobScheduler {
 		} catch (NoAPIKeyException e1) { 
 			LoggerFactory.getLogger(JobScheduler.class).warn("You do not have a reddit client/secret setup. Scheduler will not run reddit feed updates");
 		}
+		leaveEmptyVoiceChannels();
 	}
 }
