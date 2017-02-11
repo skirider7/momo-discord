@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import io.ph.bot.audio.GuildMusicManager;
 import io.ph.bot.exception.NoAPIKeyException;
 import io.ph.bot.jobs.StatusChangeJob;
+import io.ph.bot.listener.AdvancedLogListeners;
 import io.ph.bot.listener.AudioListeners;
 import io.ph.bot.listener.Listeners;
 import io.ph.bot.listener.ModLogListeners;
@@ -63,6 +64,7 @@ public class Bot {
 		dispatcher.registerListener(new VoiceChannelListeners());
 		dispatcher.registerListener(new ModLogListeners());
 		dispatcher.registerListener(new Listeners());
+		dispatcher.registerListener(new AdvancedLogListeners());
 		JobScheduler.initializeScheduler();
 	}
 

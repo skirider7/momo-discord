@@ -97,7 +97,8 @@ public class Guild {
 				config.getBoolean("LimitToOneRole", false),
 				config.getBoolean("FirstTime"),
 				config.getBoolean("DisableInvites", false),
-				config.getBoolean("PMWelcomeMessage", false));
+				config.getBoolean("PMWelcomeMessage", false),
+				config.getBoolean("AdvancedLogging", false));
 		String[] joinableRolesP = config.getStringArray("JoinableRoles");
 		for(String s : joinableRolesP) {
 			if(s.equals(""))
@@ -339,10 +340,11 @@ public class Guild {
 		private boolean limitToOneRole;
 		private boolean firstTime;
 		private boolean disableInvites;
+		private boolean advancedLogging;
 
 		ServerConfiguration(String commandPrefix, int messagesPerFifteen, int commandCooldown,
 				String welcomeMessage, boolean limitToOneRole, boolean firstTime, boolean disableInvites,
-				boolean pmWelcomeMessage) {
+				boolean pmWelcomeMessage, boolean advancedLogging) {
 			this.commandPrefix = commandPrefix;
 			this.messagesPerFifteen = messagesPerFifteen;
 			this.commandCooldown = commandCooldown;
@@ -350,7 +352,8 @@ public class Guild {
 			this.limitToOneRole = limitToOneRole;
 			this.firstTime = firstTime;
 			this.disableInvites = disableInvites;
-			this.setPmWelcomeMessage(pmWelcomeMessage);
+			this.pmWelcomeMessage = pmWelcomeMessage;
+			this.advancedLogging = advancedLogging;
 		}
 
 		@Override
@@ -420,6 +423,16 @@ public class Guild {
 
 		public void setPmWelcomeMessage(boolean pmWelcomeMessage) {
 			this.pmWelcomeMessage = pmWelcomeMessage;
+			config.setProperty("PMWelcomeMessage", pmWelcomeMessage);
+		}
+
+		public boolean isAdvancedLogging() {
+			return advancedLogging;
+		}
+
+		public void setAdvancedLogging(boolean advancedLogging) {
+			this.advancedLogging = advancedLogging;
+			config.setProperty("AdvancedLogging", advancedLogging);
 		}
 	}
 

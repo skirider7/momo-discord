@@ -8,6 +8,7 @@ import io.ph.bot.procedural.ProceduralAnnotation;
 import io.ph.bot.procedural.ProceduralCommand;
 import io.ph.bot.procedural.ProceduralListener;
 import io.ph.bot.procedural.StepType;
+import io.ph.util.Util;
 import sx.blah.discord.handle.obj.IMessage;
 
 /**
@@ -26,10 +27,9 @@ import sx.blah.discord.handle.obj.IMessage;
 		)
 @ProceduralAnnotation (
 		title = "Welcome message",
-		steps = {"PM message to the user or broadcast it in this channel? (y/n)", 
-				"What message do you want to send? Use $user$ and $server$ to replace "
-				+ "with a mention and server name, respectively. Leave empty to clear welcome message"}, 
-		types = {StepType.YES_NO, StepType.STRING},
+		steps = {"PM message to the user? If no, the message will be broadcast to your "
+				+ "designated welcome channel (y/n)"}, 
+		types = {StepType.YES_NO},
 		breakOut = "finish"
 		)
 public class ChangeWelcomeMessage extends ProceduralCommand implements Command {
@@ -55,7 +55,7 @@ public class ChangeWelcomeMessage extends ProceduralCommand implements Command {
 	@Override
 	public void finish() {
 		boolean pmWelcomeMessage = (boolean) super.getResponses().get(0);
-		String welcomeMessage = (String) super.getResponses().get(1);
+		String welcomeMessage = Util.getCommandContents(super.getStarter());
 		Guild.guildMap.get(super.getStarter().getGuild().getID()).getGuildConfig().setPmWelcomeMessage(pmWelcomeMessage);
 		Guild.guildMap.get(super.getStarter().getGuild().getID()).getGuildConfig().setWelcomeMessage(welcomeMessage);
 		if(welcomeMessage.equals(""))
