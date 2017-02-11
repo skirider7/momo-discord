@@ -41,7 +41,7 @@ public class AdvancedLogListeners {
 		.withAuthorName(e.getAuthor().getDisplayName(e.getGuild()) + "'s message was deleted in #"
 				+ e.getChannel().getName())
 		.withColor(Color.MAGENTA)
-		.appendField("#" + e.getChannel().getName(), e.getMessage().getContent(), false)
+		.appendField("Message contents", e.getMessage().getContent(), false)
 		.withTimestamp(System.currentTimeMillis());
 		MessageUtils.sendMessage(e.getGuild().getChannelByID(Guild.guildMap.get(e.getGuild().getID())
 				.getSpecialChannels().getLog()), em.build());
