@@ -15,19 +15,21 @@ public class AdvancedLogListeners {
 		if(!Guild.guildMap.get(e.getGuild().getID()).getGuildConfig().isAdvancedLogging())
 			return;
 		// According to docs, this will update pins/unpins & embeds. When oldMessage is null, ignore
-		if(e.getOldMessage() == null)
+		if(e.getOldMessage() == null || e.getOldMessage().getContent() == null
+				|| e.getOldMessage().getContent().isEmpty())
 			return;
 		EmbedBuilder em = new EmbedBuilder();
 		em.withAuthorIcon(e.getAuthor().getAvatarURL())
 		.withColor(Color.MAGENTA)
-		.withAuthorName(e.getAuthor().getDisplayName(e.getGuild()) + " has edited a message")
+		.withAuthorName(e.getAuthor().getDisplayName(e.getGuild()) + " edited a message in #"
+				+ e.getChannel().getName())
 		.appendField("Old message", e.getOldMessage().getContent(), false)
 		.appendField("New message", e.getNewMessage().getContent(), false)
 		.withTimestamp(System.currentTimeMillis());
 		MessageUtils.sendMessage(e.getGuild().getChannelByID(Guild.guildMap.get(e.getGuild().getID())
 				.getSpecialChannels().getLog()), em.build());
 	}
-	
+
 	@EventSubscriber
 	public void onMessageDeleteEvent(MessageDeleteEvent e) {
 		if(!Guild.guildMap.get(e.getGuild().getID()).getGuildConfig().isAdvancedLogging())
@@ -36,7 +38,8 @@ public class AdvancedLogListeners {
 			return;
 		EmbedBuilder em = new EmbedBuilder();
 		em.withAuthorIcon(e.getAuthor().getAvatarURL())
-		.withAuthorName(e.getAuthor().getDisplayName(e.getGuild()) + " deleted a message")
+		.withAuthorName(e.getAuthor().getDisplayName(e.getGuild()) + "'s message was deleted in #"
+				+ e.getChannel().getName())
 		.withColor(Color.MAGENTA)
 		.appendField("#" + e.getChannel().getName(), e.getMessage().getContent(), false)
 		.withTimestamp(System.currentTimeMillis());
