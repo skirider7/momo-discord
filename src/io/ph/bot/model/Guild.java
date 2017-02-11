@@ -14,16 +14,15 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
-import com.google.code.chatterbotapi.ChatterBotFactory;
-import com.google.code.chatterbotapi.ChatterBotSession;
-import com.google.code.chatterbotapi.ChatterBotType;
-
 import io.ph.bot.Bot;
 import io.ph.bot.audio.AudioManager;
 import io.ph.bot.audio.GuildMusicManager;
 import io.ph.bot.commands.Command;
 import io.ph.bot.commands.CommandHandler;
 import io.ph.bot.exception.BadCommandNameException;
+import main.java.com.google.code.chatterbotapi.ChatterBotFactory;
+import main.java.com.google.code.chatterbotapi.ChatterBotSession;
+import main.java.com.google.code.chatterbotapi.ChatterBotType;
 import net.jodah.expiringmap.ExpirationPolicy;
 import net.jodah.expiringmap.ExpiringMap;
 import sx.blah.discord.handle.obj.IGuild;
@@ -44,7 +43,7 @@ public class Guild {
 	private HashSet<String> joinableRoles = new HashSet<String>();
 	private HistoricalSearches historicalSearches;
 	private GuildMusicManager musicManager;
-	private ChatterBotSession cleverBot;
+	private main.java.com.google.code.chatterbotapi.ChatterBotSession cleverBot;
 	private String mutedRoleId;
 	private String guildId;
 

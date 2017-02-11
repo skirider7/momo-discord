@@ -78,7 +78,7 @@
 		<dependency>
 			<groupId>com.github.austinv11</groupId>
 			<artifactId>Discord4j</artifactId>
-			<version>df556d9</version>
+			<version>912f3a3</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.twitter4j/twitter4j-stream -->
 		<dependency>
@@ -167,9 +167,9 @@
 			<version>0.9.10</version>
 		</dependency>
 		<dependency>
-			<groupId>ca.pjer</groupId>
+			<groupId>com.github.paul-io</groupId>
 			<artifactId>chatter-bot-api</artifactId>
-			<version>1.4.5</version>
+			<version>80e6e7aab6</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.quartz-scheduler/quartz -->
 		<dependency>
