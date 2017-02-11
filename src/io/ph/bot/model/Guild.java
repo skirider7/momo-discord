@@ -96,7 +96,8 @@ public class Guild {
 				welcomeMessage,
 				config.getBoolean("LimitToOneRole", false),
 				config.getBoolean("FirstTime"),
-				config.getBoolean("DisableInvites", false));
+				config.getBoolean("DisableInvites", false),
+				config.getBoolean("PMWelcomeMessage", false));
 		String[] joinableRolesP = config.getStringArray("JoinableRoles");
 		for(String s : joinableRolesP) {
 			if(s.equals(""))
@@ -334,12 +335,14 @@ public class Guild {
 		private int messagesPerFifteen;
 		private int commandCooldown;
 		private String welcomeMessage;
+		private boolean pmWelcomeMessage;
 		private boolean limitToOneRole;
 		private boolean firstTime;
 		private boolean disableInvites;
 
 		ServerConfiguration(String commandPrefix, int messagesPerFifteen, int commandCooldown,
-				String welcomeMessage, boolean limitToOneRole, boolean firstTime, boolean disableInvites) {
+				String welcomeMessage, boolean limitToOneRole, boolean firstTime, boolean disableInvites,
+				boolean pmWelcomeMessage) {
 			this.commandPrefix = commandPrefix;
 			this.messagesPerFifteen = messagesPerFifteen;
 			this.commandCooldown = commandCooldown;
@@ -347,6 +350,7 @@ public class Guild {
 			this.limitToOneRole = limitToOneRole;
 			this.firstTime = firstTime;
 			this.disableInvites = disableInvites;
+			this.setPmWelcomeMessage(pmWelcomeMessage);
 		}
 
 		@Override
@@ -408,6 +412,14 @@ public class Guild {
 		public void setDisableInvites(boolean disableInvites) {
 			this.disableInvites = disableInvites;
 			config.setProperty("DisableInvites", disableInvites);
+		}
+
+		public boolean isPmWelcomeMessage() {
+			return pmWelcomeMessage;
+		}
+
+		public void setPmWelcomeMessage(boolean pmWelcomeMessage) {
+			this.pmWelcomeMessage = pmWelcomeMessage;
 		}
 	}
 

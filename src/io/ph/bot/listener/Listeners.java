@@ -42,28 +42,8 @@ import sx.blah.discord.util.RateLimitException;
 public class Listeners {
 	@EventSubscriber
 	public void onReadyEvent(ReadyEvent e) {
-		/*LoggerFactory.getLogger(Listeners.class).info("Connecting to voice channels...");
-		int connectedVoice = 0;
-		for(IGuild guild : Bot.getInstance().getBot().getGuilds()) {
-			Guild g = Guild.guildMap.get(guild.getID());
-			if(g.getSpecialChannels().getVoice().length() > 0) {
-				IVoiceChannel target = guild.getVoiceChannelByID(g.getSpecialChannels().getVoice());
-				if(target == null) {
-					g.getSpecialChannels().setVoice("");
-					continue;
-				}
-				try {
-					target.join();
-					g.initMusicManager(guild);
-					connectedVoice++;
-				} catch (MissingPermissionsException e1) {
-					e1.printStackTrace();
-				}
-			}
-		}*/
 		JobScheduler.initializeEventSchedule();
 		State.changeBotAvatar(new File("resources/avatar/" + Bot.getInstance().getAvatar()));
-		//LoggerFactory.getLogger(Listeners.class).info("Connected to {} music channels", connectedVoice);
 		TwitterEventListener.initTwitter();
 		Bot.getInstance().getLogger().info("Bot is now online");
 	}
@@ -196,11 +176,15 @@ public class Listeners {
 					.withColor(Color.GREEN).withTimestamp(System.currentTimeMillis());
 			MessageUtils.sendMessage(e.getGuild().getChannelByID(g.getSpecialChannels().getLog()), em.build());
 		}
-		if(!g.getSpecialChannels().getWelcome().equals("")) {
+		if((!g.getSpecialChannels().getWelcome().equals("") || g.getGuildConfig().isPmWelcomeMessage())
+				&& !g.getGuildConfig().getWelcomeMessage().isEmpty()) {
 			String msg = g.getGuildConfig().getWelcomeMessage();
 			msg = msg.replaceAll("\\$user\\$", "<@"+e.getUser().getID()+">");
 			msg = msg.replaceAll("\\$server\\$", e.getGuild().getName());
-			MessageUtils.sendMessage(e.getGuild().getChannelByID(g.getSpecialChannels().getWelcome()), msg, true);
+			if(!g.getGuildConfig().isPmWelcomeMessage())
+				MessageUtils.sendMessage(e.getGuild().getChannelByID(g.getSpecialChannels().getWelcome()), msg, true);
+			else
+				MessageUtils.sendPrivateMessage(e.getUser(), msg);
 		}
 	}
 
