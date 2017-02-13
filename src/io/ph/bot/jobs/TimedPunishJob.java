@@ -71,6 +71,8 @@ public class TimedPunishJob implements Job {
 				case "mute":
 					try {
 						IUser u = g.getUserByID(userId);
+						if (u == null)
+							break;
 						u.removeRole(g.getRoleByID(Guild.guildMap.get(g.getID()).getMutedRoleId()));
 						Bot.getInstance().getBot().getDispatcher().dispatch(new UserUnmutedEvent(u, g));
 					} catch (MissingPermissionsException e) {
