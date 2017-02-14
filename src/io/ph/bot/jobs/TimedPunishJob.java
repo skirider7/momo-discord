@@ -81,6 +81,8 @@ public class TimedPunishJob implements Job {
 						e.printStackTrace();
 					} catch (DiscordException e) {
 						e.printStackTrace();
+					} catch (NullPointerException e) {
+						
 					}
 					break;
 				}
