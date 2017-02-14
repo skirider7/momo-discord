@@ -102,6 +102,7 @@ public class SourceSearch implements Command {
 					image.getData().getPixivId()), true);
 			break;
 		case 9: // Danbooru
+		case 30: // I guess 30 is danbooru as well
 			em.withTitle(String.format("Artist: %s", image.getData().getCreator()));
 			em.appendField("Artist", image.getData().getCreator(), true);
 			em.appendField("Original", String.format("https://danbooru.donmai.us/posts/%d", image.getData().getDanbooruId()), true);
