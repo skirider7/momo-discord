@@ -147,8 +147,8 @@ public class Listeners {
 		Guild g = new Guild(e.getGuild());
 
 		if(g.getGuildConfig().isFirstTime()) {
-			MessageUtils.sendMessage(e.getGuild().getChannels().get(0), "Hi, I'm Momo! You are my "
-					+ Util.ordinal(Bot.getInstance().getBot().getGuilds().size()) + " server.\n"
+			MessageUtils.sendMessage(e.getGuild().getChannels().get(0), "Hi, I'm Luna!\n"
+					+ "I was originally designed by Kagumi as Momo, and am currently edited by skirider7.\n"
 					+ "If you want a list of commands, use `$commandlist`. If you want some tutorials on my features, "
 					+ "do `$howto` - I suggest doing `$howto setup` immediately. For easy, one time configuration, do `$configure`");
 			Guild.guildMap.get(e.getGuild().getID()).getGuildConfig().setFirstTime(false);
