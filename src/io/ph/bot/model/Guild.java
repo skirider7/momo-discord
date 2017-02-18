@@ -46,6 +46,8 @@ public class Guild {
 	private main.java.com.google.code.chatterbotapi.ChatterBotSession cleverBot;
 	private String mutedRoleId;
 	private String guildId;
+	//Added by skirider7, commands disabled per channel map
+	private HashMap<String, ArrayList<String>> disabledPerChannelMap = new HashMap<String, ArrayList<String>>();
 
 	/**
 	 * Initialize the Guild object and add it to the hashmap
@@ -193,6 +195,100 @@ public class Guild {
 	public void disableAllCommands() {
 		commandStatus.replaceAll((key, value) -> false);
 	}
+	
+	/**
+	 * Code added by skirider7 to implement restricted commands per channel
+	 */
+	
+	public HashMap<String,ArrayList<String>> getDisabledPerChannel(){
+		return disabledPerChannelMap;
+	}
+	
+	/**
+	 * Disable a command in this channel
+	 * @param s Main name of command to disable
+	 * @param c Channel to disable in
+	 * @return True if disabled, false if it was already disabled
+	 * @throws BadCommandNameException Command doesn't exist
+	 */
+	
+	public boolean disablePerChannel(String s, String c) throws BadCommandNameException {
+		return editDisabledPerChannel(s, c, false);
+	}
+	
+	/**
+	 * Enable a command in this channel
+	 * @param s Main name of command to enable
+	 * @param c Channel to enable in
+	 * @return True if enabled, false if it was already enabled
+	 * @throws BadCommandNameException Command doesn't exist
+	 */
+	
+	public boolean enablePerChannel(String s, String c) throws BadCommandNameException {
+		return editDisabledPerChannel(s, c, true);
+	}
+	
+	public boolean editDisabledPerChannel(String s, String c, boolean toEnable) throws BadCommandNameException {
+		s = CommandHandler.aliasToDefaultMap.get(s);
+		if(!validCommandToEdit(s))
+			throw new BadCommandNameException();
+		
+		if(toEnable){ // enabling a command
+			if(!disabledPerChannelMap.containsKey(c)) // if no commands are banned in this channel
+				return false;
+			else{
+				if(!disabledPerChannelMap.get(c).contains(s)) // if channel has banned commands but this is not one of them
+					return false;
+				else // if the channel bans this command
+					disabledPerChannelMap.get(c).remove(s);
+					return true;
+			}
+		}else{ // disabling a command
+			if(!disabledPerChannelMap.containsKey(c)) { // if no commands are banned in this channel
+				ArrayList<String> cmdlist = new ArrayList<String>();
+				cmdlist.add(s);
+				disabledPerChannelMap.put(c, cmdlist); // create entry in map for channel and command
+				return true;
+			}else{ // This channel already has commands
+				if(disabledPerChannelMap.get(c).contains(s)) // if channel already bans command
+					return false;
+				else // channel does not already ban command
+					disabledPerChannelMap.get(c).add(s);
+					return true;
+			}
+		}
+	}
+	
+	/**
+	 * Enable all commands in this channel
+	 * @param c Channel to enable in
+	 * @return True if enabled, false if nothing was banned
+	 */
+	public boolean enableAllPerChannel(String c){
+		if(disabledPerChannelMap.containsKey(c)){
+			disabledPerChannelMap.remove(c);
+			return true;
+		}else
+			return false;
+	}
+	
+	
+	/**
+	 * Checks if a command is banned in a channel
+	 * @param c Channel command is entered in
+	 * @param s Command being checked
+	 * @return true if command is banned, false if command is not
+	 */
+	public boolean checkChannelDisable(String c, String s){
+		if(disabledPerChannelMap.containsKey(c)){
+			if(disabledPerChannelMap.get(c).contains(s)) // if the attempted command is banned in this channel
+				return true;
+			else
+				return false;
+		}else // If the channel has no commands banned
+			return false;
+	}
+	
 
 	/**
 	 * Disable a feature in this guild
@@ -311,7 +407,7 @@ public class Guild {
 	}
 	public HashMap<String, Boolean> getFeatureStatus() {
 		return this.featureStatus;
-	}
+	}	
 	public String getMutedRoleId() {
 		return mutedRoleId;
 	}
@@ -331,6 +427,7 @@ public class Guild {
 		guild.getAudioManager().setAudioProvider(this.getMusicManager().getAudioProvider());
 	}
 
+	
 	public class ServerConfiguration {
 		private String commandPrefix;
 		private int messagesPerFifteen;

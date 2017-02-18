@@ -23,6 +23,7 @@ import io.ph.bot.model.Guild;
 import io.ph.bot.model.Permission;
 import io.ph.util.Util;
 import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.util.EmbedBuilder;
 
 /**
  * A centralized class that manages all commands available across servers
@@ -99,15 +100,26 @@ public class CommandHandler {
 	 * Entry point for command handling
 	 * If the user doesn't have at least kick privileges and the command is disabled,
 	 * the command is rejected without a message.
+	 * 
+	 * Added by skirider7: Checks if command is blocked in given channel.
+	 * If so, command is rejected without a message.
+	 * It's on my list to come back and fix it so the message shows up later, but
+	 * I'm leaving it as of 2/17/17
 	 * @param msg Message to parse
 	 */
 	public static void processCommand(IMessage msg) {
 		Guild g = Guild.guildMap.get(msg.getGuild().getID());
+		String c = msg.getChannel().getID();
 		if(msg.getContent().contains(" ")) {
 			String cmd = aliasToDefaultMap.get(msg.getContent().substring(g.getGuildConfig().getCommandPrefix().length(),
 					msg.getContent().indexOf(" ")));
 			if(cmd == null)
 				return;
+			if(g.checkChannelDisable(c, cmd)){ // If command is on the blocked list for this channel
+				//EmbedBuilder em = new EmbedBuilder().withTimestamp(System.currentTimeMillis());
+				//em.withColor(Color.RED).withTitle("Error").withDesc("**" + cmd + "** is disabled in this channel.");
+				return;
+			}
 			if(getCommand(cmd).hasPermissions(msg)) {
 				if(g.getCommandStatus(cmd) || Util.userHasPermission(msg.getAuthor(), msg.getGuild(), Permission.KICK)) {
 					WebSyncJob.commandCount++;
@@ -119,6 +131,11 @@ public class CommandHandler {
 					msg.getContent().length()));
 			if(cmd == null)
 				return;
+			if(g.checkChannelDisable(c, cmd)){ // If command is on the blocked list for this channel
+				//EmbedBuilder em = new EmbedBuilder().withTimestamp(System.currentTimeMillis());
+				//em.withColor(Color.RED).withTitle("Error").withDesc("**" + cmd + "** is disabled in this channel.");
+				return;
+			}
 			if(getCommand(cmd).hasPermissions(msg)) {
 				if(g.getCommandStatus(cmd) || Util.userHasPermission(msg.getAuthor(), msg.getGuild(), Permission.KICK)) {
 					WebSyncJob.commandCount++;
