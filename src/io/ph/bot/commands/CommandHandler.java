@@ -1,5 +1,7 @@
 package io.ph.bot.commands;
 
+import java.awt.Color;
+
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ import io.ph.bot.jobs.WebSyncJob;
 import io.ph.bot.model.Guild;
 import io.ph.bot.model.Permission;
 import io.ph.util.Util;
+import io.ph.util.MessageUtils;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.EmbedBuilder;
 
@@ -116,8 +119,9 @@ public class CommandHandler {
 			if(cmd == null)
 				return;
 			if(g.checkChannelDisable(c, cmd)){ // If command is on the blocked list for this channel
-				//EmbedBuilder em = new EmbedBuilder().withTimestamp(System.currentTimeMillis());
-				//em.withColor(Color.RED).withTitle("Error").withDesc("**" + cmd + "** is disabled in this channel.");
+				EmbedBuilder em = new EmbedBuilder().withTimestamp(System.currentTimeMillis());
+				em.withColor(Color.RED).withTitle("Error").withDesc("**" + cmd + "** is disabled in this channel.");
+				MessageUtils.sendMessage(msg.getChannel(), em.build());
 				return;
 			}
 			if(getCommand(cmd).hasPermissions(msg)) {
@@ -132,8 +136,9 @@ public class CommandHandler {
 			if(cmd == null)
 				return;
 			if(g.checkChannelDisable(c, cmd)){ // If command is on the blocked list for this channel
-				//EmbedBuilder em = new EmbedBuilder().withTimestamp(System.currentTimeMillis());
-				//em.withColor(Color.RED).withTitle("Error").withDesc("**" + cmd + "** is disabled in this channel.");
+				EmbedBuilder em = new EmbedBuilder().withTimestamp(System.currentTimeMillis());
+				em.withColor(Color.RED).withTitle("Error").withDesc("**" + cmd + "** is disabled in this channel.");
+				MessageUtils.sendMessage(msg.getChannel(), em.build());
 				return;
 			}
 			if(getCommand(cmd).hasPermissions(msg)) {
